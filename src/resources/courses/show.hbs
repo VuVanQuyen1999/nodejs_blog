@@ -2,15 +2,24 @@
     <div class="row">
         <div class="col-lg-3">
             <button>HỌC NGAY</button>
+            <ul>
+                <li>{{course.level}}</li>
+            </ul>
         </div>
-        <div class="col-lg-3">
-            <h2>Xây dựng weg với NodeJS & ExpressJS</h2>
-            {{! video }}
-            <h2>
-                Xây dựng web trong thực tế với NodeJS & ExpressJS với cách chia
-                sẻ chi tiết, tận tâm, dễ hiểu và chất giọng giàu sức sống của
-                người chia sẻ
-            </h2>
+        <div class="col-lg-9">
+            <h2>{{course.name}}</h2>
+            <iframe
+                width="560"
+                height="315"
+                src="https://www.youtube.com/embed/{{course.videoId}}"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+            ></iframe>
+            <p>
+                {{course.description}}
+            </p>
         </div>
     </div>
 </div>
