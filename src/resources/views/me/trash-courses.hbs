@@ -1,0 +1,114 @@
+<div class="mt-4">
+    <div class="">
+        <h3>Khóa học đã xóa</h3>
+        <a href="/me/stored/courses">Danh sách khóa học</a>
+    </div>
+
+    <table class="table mt-4">
+        <thead>
+            <tr>
+                <th scope="col">STT</th>
+                <th scope="col">Tên khóa học</th>
+                <th scope="col">Trình độ</th>
+                <th scope="col">Thời gian xóa</th>
+                <th scope="col">Tùy chọn</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each courses}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.level}}</td>
+                    <td>{{this.deletedAt}}</td>
+                    <td>
+                        <div
+                            class="btn-group"
+                            role="group"
+                            aria-label="Basic outlined example"
+                        >
+                            <a
+                                type="button"
+                                class="btn btn-outline-primary btn-restore"
+                                data-id="{{this._id}}"
+                            >
+                                Khôi phục
+                            </a>
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteCourseModal"
+                                data-bs-id="{{this._id}}"
+                            >
+                                Xóa vĩnh viễn
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            {{else}}
+                <tr>
+                    <td colspan="5" class="text-center">
+                        Thùng rác trống
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+{{! confirm delete course }}
+
+<div class="modal" tabindex="-1" id="deleteCourseModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bạn muốn xóa khóa học này?</h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body">
+                <p>Hành động này không thể khôi phục. Bạn vẫn muốn thực hiện
+                    chứ?</p>
+            </div>
+            <div class="modal-footer">
+                <button
+                    id="btnDeleteCourse"
+                    type="button"
+                    class="btn btn-danger"
+                >Xóa vĩnh viễn</button>
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    Hủy
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="deleteForm" method="post"></form>
+<form id="restoreForm" method="post"></form>
+
+<script>
+
+    var deleteForm = document.forms['deleteForm']; var restoreForm =
+    document.forms['restoreForm']; var courseId; const exampleModal =
+    document.getElementById('deleteCourseModal');
+    exampleModal.addEventListener('show.bs.modal', event => { const button =
+    event.relatedTarget; courseId = button.getAttribute('data-bs-id') }); const
+    btnDeleteCourse = document.getElementById('btnDeleteCourse');
+    btnDeleteCourse.onclick = function () { deleteForm.action = '/courses/' +
+    courseId + '/force?_method=DELETE'; deleteForm.submit() }; var restoreBtns =
+    document.getElementsByClassName('btn-restore'); const restoreBtnsLength =
+    restoreBtns.length; for (let x = 0; x < restoreBtnsLength; x++) {
+    restoreBtns[x].onclick = () => {let courseStoreId =
+    restoreBtns[x].getAttribute('data-id'); restoreForm.action = '/courses/' +
+    courseStoreId + '/restore?_method=PATCH'; restoreForm.submit() }; }
+</script>
