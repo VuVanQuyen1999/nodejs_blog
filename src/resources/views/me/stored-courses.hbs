@@ -25,6 +25,7 @@
                 class="form-select form-select-sm checkbox-select-all-options"
                 name="action"
                 aria-label="Default select example"
+                required
             >
                 <option value=""> --- Chọn hành động --- </option>
                 <option value="delete">Xóa</option>
@@ -43,9 +44,18 @@
             <tr>
                 <th></th>
                 <th scope="col">STT</th>
-                <th scope="col">Tên khóa học</th>
-                <th scope="col">Trình độ</th>
-                <th scope="col">Thời gian tạo</th>
+                <th scope="col">
+                    Tên khóa học
+                    {{{sortable "name" _sort}}}
+                </th>
+                <th scope="col">
+                    Trình độ
+                    {{{sortable "level" _sort}}}
+                </th>
+                <th scope="col">
+                    Thời gian tạo
+                    {{{sortable "createAt" _sort}}}
+                </th>
                 <th scope="col">Tùy chọn</th>
             </tr>
         </thead>
@@ -140,9 +150,12 @@
 <script>
     {{! deleteForm }}
     var deleteForm = document.forms['deleteForm'];
+
     {{! open modal }}
-    var courseId; const exampleModal =
-    document.getElementById('deleteCourseModal');
+    var courseId;
+    {{!  }}
+    const exampleModal = document.getElementById('deleteCourseModal');
+    {{!  }}
     exampleModal.addEventListener('show.bs.modal', event => { const button
     =event.relatedTarget; courseId = button.getAttribute('data-bs-id') });
 
@@ -152,11 +165,12 @@
     courseId + '?_method=DELETE'; deleteForm.submit() }
 
     {{! checkbox-all }}
-    var courseItemCheckbox = document.getElementsByName('courseIds[]'); var
-    checkboxAll = document.getElementById('checkbox-all'); checkboxAll.onchange
-    = () => { var isCheckAll = checkboxAll.checked; for (let i = 0; i <
-    courseItemCheckbox.length; i++) {courseItemCheckbox[i].checked = isCheckAll;
-    renderCheckAllSubmitBtn()} };
+    var courseItemCheckbox = document.getElementsByName('courseIds[]');
+    {{!  }}
+    var checkboxAll = document.getElementById('checkbox-all');
+    checkboxAll.onchange = () => { var isCheckAll = checkboxAll.checked; for
+    (let i = 0; i < courseItemCheckbox.length; i++)
+    {courseItemCheckbox[i].checked = isCheckAll; renderCheckAllSubmitBtn()} };
 
     {{! Course item checkbox }}
     for (let i = 0; i < courseItemCheckbox.length; i++)
@@ -172,13 +186,8 @@
     (checkedCount > 0) { checkSubmitBtn.classList.remove('disabled') } else
     {checkSubmitBtn.classList.add('disabled')} };
 
-    {{! check submit click }}
-    var containerForm = document.getElementsByName('container-form')[0];
-    checkSubmitBtn.onclick = (e) => { e.preventDefault(); var isSubmittable =
-    !checkSubmitBtn.classList.contains('disabled'); if (isSubmittable) {
-    containerForm.submit(); } };
-
     {{! validate }}
-    checkSubmitBtn.onsubmit = (e) => { if (!isSubmittable) { e.preventDefault();
-    }; };
+    checkSubmitBtn.addEventListener('click', () => { var isSubmittable =
+    !checkSubmitBtn.classList.contains('disabled'); if (!isSubmittable) {
+    containerForm.onsubmit = (e) => { e.preventDefault();} }});
 </script>

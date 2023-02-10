@@ -1,2 +1,5 @@
+# Ignore artifacts:
 stored-courses
 trash-courses
+
+.hbs

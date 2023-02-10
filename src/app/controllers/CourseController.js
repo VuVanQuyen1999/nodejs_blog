@@ -25,7 +25,7 @@ class CourseController {
         course
             .save()
             .then(() => res.redirect("/me/stored/courses"))
-            .catch((err) => {});
+            .catch(next);
     }
 
     // [GET] /courses/:id/edit
@@ -69,7 +69,15 @@ class CourseController {
 
     // [POST] /courses/handle-form-actions
     handleFormActions(req, res, next) {
-        res.json(req.body);
+        switch (req.body.action) {
+            case "delete":
+                Course.delete({ _id: { $in: req.body.courseIds } })
+                    .then(() => res.redirect("back"))
+                    .catch(next);
+                break;
+            default:
+                res.json({ message: "Action invalid" });
+        }
     }
 }
 
